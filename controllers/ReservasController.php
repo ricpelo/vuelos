@@ -11,6 +11,7 @@ use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
 
 /**
  * ReservasController implements the CRUD actions for Reserva model.
@@ -27,6 +28,17 @@ class ReservasController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
+                ],
+            ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['index', 'crear'],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'actions' => ['index', 'crear'],
+                        'roles' => ['@'],
+                    ],
                 ],
             ],
         ];
@@ -70,6 +82,7 @@ class ReservasController extends Controller
             return $this->render('crear', [
                 'model' => $model,
                 'vuelo' => $vuelo->id_vuelo,
+                'asientos' => array_combine($vuelo->plazasLibres, $vuelo->plazasLibres),
             ]);
         }
     }
